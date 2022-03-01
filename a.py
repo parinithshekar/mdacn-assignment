@@ -67,10 +67,41 @@ def question5(g):
 def question6(g):
     # Have to fix this
     print("6)")
-    is_small_world = False
-    if nx.average_shortest_path_length(g) < g.number_of_nodes() / 20:
-        is_small_world = True
-    print(f'Small-world property? {is_small_world}')
+    print(f'Number of edges g: {g.number_of_edges()}')
+
+    nb_nodes = g.number_of_nodes()
+    # make cycle graphs
+    for d in range(1, 11):
+        greg = nx.Graph()
+        for node_index in range(nb_nodes):
+            for i in range(1, d + 1):
+                node_index_target = (node_index + i) % nb_nodes
+                if node_index_target == 0:
+                    node_index_target = 167
+                greg.add_edge(node_index, node_index_target)
+
+        print(d)
+        print(f'Average hopcount: {nx.average_shortest_path_length(greg)}')
+        print(f'Diameter: {nx.diameter(greg)}')
+
+    # make erdos renyi graphs
+    for i in range(10):
+        connected = False
+        g_er = nx.Graph()
+        while not connected:
+            for edge in g.edges:
+                node1 = rnd.randint(1, 167)
+                node2 = rnd.randint(1, 167)
+                g_er.add_edge(node1, node2)
+            connected = nx.is_connected(g_er)
+        print(f"Random graph with {g_er.number_of_edges()} edges")
+        print(f'Average hopcount: {nx.average_shortest_path_length(g_er)}')
+        print(f'Diameter: {nx.diameter(g_er)}')
+
+    #is_small_world = False
+    #if nx.average_shortest_path_length(g) < g.number_of_nodes() / 20:
+    #    is_small_world = True
+    #print(f'Small-world property? {is_small_world}')
 
 
 def question7(g):
