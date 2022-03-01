@@ -73,11 +73,25 @@ def plot_inter_arrival_density(gd, g2, g3):
                 res += dg3[w]
         fg3.append((res/g3total)/dx)
     
-    plt.figure("Inter Arrival distribution")
-    plt.plot(fgd, label='Gdata')
-    plt.plot(fg2, label='G2')
-    plt.plot(fg3, label='G3')
-    plt.xlabel("Inter-arrival time")
-    plt.ylabel("Probability density")
-    plt.legend()
+
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+
+    ax1.set_title("Gdata interarrival distribution")
+    ax1.loglog(fgd, label='Gdata', color='tab:blue')
+    ax1.set_xlabel("Inter-arrival time")
+    ax1.set_ylabel("Probability density")
+    ax1.legend()
+
+    ax2.set_title("G2 interarrival distribution")
+    ax2.loglog(fg2, label='G2', color='tab:orange')
+    ax2.set_xlabel("Inter-arrival time")
+    ax2.set_ylabel("Probability density")
+    ax2.legend()
+
+    ax3.set_title("G3 interarrival distribution")
+    ax3.loglog(fg3, label='G3', color='tab:green')
+    ax3.set_xlabel("Inter-arrival time")
+    ax3.set_ylabel("Probability density")
+    ax3.legend()
+
     plt.show()

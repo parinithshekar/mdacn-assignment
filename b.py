@@ -72,6 +72,23 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
 
     return all_infected_nodes, node_efficiency_temp, all_nodes_first_contact, majority_nodes_first_contact
 
+def plot_infection_stats(infection_mean, infection_std):
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+
+    ax1.set_title("Infected nodes mean")
+    ax1.plot(infection_mean, label='Mean')
+    ax1.set_xlabel('Time steps')
+    ax1.set_ylabel('Mean infected nodes')
+    ax1.legend()
+
+    ax2.set_title("Infected nodes STD")
+    ax2.plot(infection_std, label='STD')
+    ax2.set_xlabel('Time steps')
+    ax2.set_ylabel('Infected nodes STD')
+    ax2.legend()
+
+    plt.show()
+
 def get_node_efficiency(node_efficiency_values):
     node_efficiency = []
     for node_index in range(len(node_efficiency_values)):

@@ -116,7 +116,8 @@ def part_b(excel_file):
     # 9
     infection_mean = np.array(all_infected_nodes).mean(axis=0)
     infection_std = np.array(all_infected_nodes).std(axis=0)
-
+    b.plot_infection_stats(infection_mean, infection_std)
+    
     # 10
     node_efficiency = b.get_node_efficiency(node_efficiency_temp)
 
