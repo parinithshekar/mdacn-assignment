@@ -65,43 +65,55 @@ def question5(g):
 
 
 def question6(g):
-    # Have to fix this
     print("6)")
-    print(f'Number of edges g: {g.number_of_edges()}')
-
-    nb_nodes = g.number_of_nodes()
-    # make cycle graphs
-    for d in range(1, 11):
-        greg = nx.Graph()
-        for node_index in range(nb_nodes):
-            for i in range(1, d + 1):
-                node_index_target = (node_index + i) % nb_nodes
-                if node_index_target == 0:
-                    node_index_target = 167
-                greg.add_edge(node_index, node_index_target)
-
-        print(d)
-        print(f'Average hopcount: {nx.average_shortest_path_length(greg)}')
-        print(f'Diameter: {nx.diameter(greg)}')
+    #print(f'Number of edges g: {g.number_of_edges()}')
+    print("--- Our graph")
+    print(f'Average hopcount: {nx.average_shortest_path_length(g)}')
+    print(f'Diameter: {nx.diameter(g)}')
+    print(f'Average clustering coefficient: {nx.average_clustering(g)}')
 
     # make erdos renyi graphs
+    avg_h = 0
+    avg_d = 0
+    avg_cc = 0
     for i in range(10):
         connected = False
         g_er = nx.Graph()
         while not connected:
-            for edge in g.edges:
+            for edge in range(nx.number_of_edges(g)):
                 node1 = rnd.randint(1, 167)
                 node2 = rnd.randint(1, 167)
                 g_er.add_edge(node1, node2)
             connected = nx.is_connected(g_er)
-        print(f"Random graph with {g_er.number_of_edges()} edges")
-        print(f'Average hopcount: {nx.average_shortest_path_length(g_er)}')
-        print(f'Diameter: {nx.diameter(g_er)}')
+        avg_h += nx.average_shortest_path_length(g_er)
+        avg_d += nx.diameter(g_er)
+        avg_cc += nx.average_clustering(g_er)
+    print("--- ER graphs")
+    print(f'Average hopcount: {avg_h/10}')
+    print(f'Diameter: {avg_d/10}')
+    print(f'Clustering coefficient: {avg_cc/10}')
 
-    #is_small_world = False
-    #if nx.average_shortest_path_length(g) < g.number_of_nodes() / 20:
-    #    is_small_world = True
-    #print(f'Small-world property? {is_small_world}')
+    # scale-free graphs
+    avg_h = 0
+    avg_d = 0
+    avg_cc = 0
+    for i in range(20):
+        r = rnd.randint(0, 100)
+        g_sf = nx.scale_free_graph(167, seed=r)
+        g_sf = nx.DiGraph(g_sf)
+        g_sf = nx.to_undirected(g_sf)
+        while not nx.is_connected(g_sf):
+            g_sf = nx.scale_free_graph(167)
+            g_sf = nx.DiGraph(g_sf)
+            g_sf = nx.to_undirected(g_sf)
+        avg_h += nx.average_shortest_path_length(g_sf)
+        avg_d += nx.diameter(g_sf)
+        avg_cc += nx.average_clustering(g_sf)
+    print("--- scale free graphs")
+    print(f'Average hopcount: {avg_h/20}')
+    print(f'Diameter: {avg_d/20}')
+    print(f'Clustering coefficient: {avg_cc/20}')
+
 
 
 def question7(g):
