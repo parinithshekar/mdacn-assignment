@@ -2,6 +2,7 @@ from itertools import count
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import random as rnd
 
 def question1(g):
     print("1)")
