@@ -204,7 +204,7 @@ def main():
     NODES = node_max - node_min + 1
     T = timestamp.max()
 
-    start_part("c", file)
+    start_part("b", file)
 
 if __name__ == '__main__':
     main()

@@ -23,7 +23,7 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
 
         # initialize other stuff
         infected_nodes_over_time = [0 for i in range(time_steps)]
-        nodes_first_contact = [0 for i in range(number_of_nodes)]
+        nodes_first_contact = [time_steps for i in range(number_of_nodes)]
         node_index = loop_index + 1
         gdata.nodes[node_index]["status"] = "infected"
         infected_nodes_over_time[0] = 1
@@ -37,13 +37,16 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
         for edge in timestamped_edges:
             node1, node2, current_timestamp = edge
 
+            nodes_first_contact[node1-1] = min(previous_timestamp, nodes_first_contact[node1-1])
+            nodes_first_contact[node2-1] = min(previous_timestamp, nodes_first_contact[node2-1])
+
             # check whether we are still at the same timestamp
             if current_timestamp != previous_timestamp:
                 # if not, then update to infected all nodes that got infected during the previous timestamp
                 previous_timestamp = current_timestamp
                 for node in nodes_to_be_updated:
                     gdata.nodes[node]["status"] = "infected"
-                    nodes_first_contact[node-1] = previous_timestamp
+                    # nodes_first_contact[node-1] = previous_timestamp
                 nodes_to_be_updated = []
 
             # check if the link is transmissive for the infection, if so update
