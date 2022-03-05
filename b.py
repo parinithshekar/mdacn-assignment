@@ -13,9 +13,11 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
     all_nodes_first_contact = []
     # First contact time for the first 126 (167 * 0.75) nodes
     majority_nodes_first_contact = []
+    
 
     for loop_index in range(number_of_nodes):
-
+        # The infected nodes
+        infected_nodes_list = []
         # initialize the graph with only nodes and no links
         gdata = nx.Graph()
         for i in range(number_of_nodes):
@@ -32,6 +34,7 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
         nodes_to_be_updated = []
         majority_nodes_avg_contact_time = 0
         previous_timestamp = 0
+        infected_nodes_list.append(node_index)
 
         # go through all edges
         for edge in timestamped_edges:
@@ -50,16 +53,20 @@ def get_infection_metrics(number_of_nodes, time_steps, timestamped_edges):
                 nodes_to_be_updated = []
 
             # check if the link is transmissive for the infection, if so update
-            if gdata.nodes[node1]["status"] == "susceptible" and gdata.nodes[node2]["status"] == "infected":
+            if gdata.nodes[node1]["status"] == "susceptible" and gdata.nodes[node2]["status"] == "infected" and node1 not in infected_nodes_list:
                 nodes_to_be_updated.append(node1)
                 majority_nodes_avg_contact_time += current_timestamp if (infected_nodes < majority_threshold) else 0
                 infected_nodes_over_time[current_timestamp-1] += 1
                 infected_nodes += 1
-            elif gdata.nodes[node2]["status"] == "susceptible" and gdata.nodes[node1]["status"] == "infected":
+                infected_nodes_list.append(node1)
+                
+            elif gdata.nodes[node2]["status"] == "susceptible" and gdata.nodes[node1]["status"] == "infected" and node2 not in infected_nodes_list:
                 nodes_to_be_updated.append(node2)
                 majority_nodes_avg_contact_time += current_timestamp if (infected_nodes < majority_threshold) else 0
                 infected_nodes_over_time[current_timestamp-1] += 1
                 infected_nodes += 1
+                infected_nodes_list.append(node2)
+                
 
         # this is just to sum them all (cumulative number of infected nodes)
         for i in range(1, len(infected_nodes_over_time)):
